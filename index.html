@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>HBS</title>	    
+    <link type="text/css" rel="stylesheet" href="./file/default.css" />
+    <script type="text/javascript" src="./file/jquery.min.js"></script>
+    <script type="text/javascript" src="./file/jscex.min.js"></script>
+    <script type="text/javascript" src="./file/jscex-parser.js"></script>
+    <script type="text/javascript" src="./file/jscex-jit.js"></script>
+    <script type="text/javascript" src="./file/jscex-builderbase.min.js"></script>
+    <script type="text/javascript" src="./file/jscex-async.min.js"></script>
+    <script type="text/javascript" src="./file/jscex-async-powerpack.min.js"></script>
+    <script type="text/javascript" src="./file/functions.js" charset="utf-8"></script>
+    <script type="text/javascript" src="./file/love.js" charset="utf-8"></script>
+
+    <style type="text/css">
+      /* Minimal slideshow styles */
+      #slideshow-wrapper { display:none; width:100%; max-width:1000px; margin:40px auto; padding:10px; box-sizing:border-box; }
+      #slideshow { position:relative; overflow:hidden; width:100%; height:520px; border-radius:10px; background:#111; box-shadow:0 8px 30px rgba(0,0,0,0.6); }
+      #slideshow .slide { position:absolute; top:0; left:0; width:100%; height:100%; text-align:center; display:none; }
+      #slideshow .slide img { max-width:100%; max-height:420px; margin-top:20px; border-radius:6px; }
+      #slide-caption { position:absolute; bottom:0; left:0; right:0; padding:14px 20px; background:rgba(0,0,0,0.55); color:#fff; font-family:Arial, sans-serif; font-size:18px; text-align:center; }
+      #prevBtn, #nextBtn { position:absolute; top:50%; transform:translateY(-50%); background:rgba(0,0,0,0.4); border:0; color:#fff; padding:12px 10px; cursor:pointer; border-radius:6px; }
+      #prevBtn { left:10px; } #nextBtn { right:10px; }
+      #dots { position:absolute; bottom:66px; left:50%; transform:translateX(-50%); }
+      .dot { display:inline-block; width:10px; height:10px; border-radius:50%; background:#666; margin:0 6px; cursor:pointer; }
+      .dot.active { background:#ddd; }
+    </style>
+
+    <script type="text/javascript">
+        function playAudio() {
+            var audio = document.getElementById("myAudio");
+            try { if (audio && audio.play) audio.play(); } catch (e) {}
+        }
+    </script>
+</head>
+<body>
+    <div id="main">
+        <div id="error"><a href="http://www.google.cn/chrome/intl/zh-CN/landing_chrome.html?hl=zh-CN&brand=CHMI">Chrome</a> (<a href="http://firefox.com.cn/download/">Firefox</a>)</div>
+        <audio autoplay="autoplay" height="100" width="100" id="myAudio" style="display:none;">
+            <source src="aud.mp3" type="audio/mp3" />
+            <embed height="100" width="100" src="aud.mp3" />
+        </audio>
+        <div id="wrap">
+            <div id="text">
+                <div id="code" style="display:none;">
+                    <span class="say">My beautiful wife 💞</span><br />
+                    <span class="say">Happy Birthday 🎈</span><br />
+                    <span class="say">May Allah bless you 🍀</span><br />
+                    <span class="say">And give u many happiness 💕</span><br />
+                    <span class="say">I loved you ❤️</span><br />
+                    <span class="say">And I will always love u 🥺 ❤️</span><br />
+                    <span class="say">Hope u have a great day today ❤️😘</span><br />
+                </div>
+            </div>
+            
+
+            <canvas id="canvas" width="1100" height="680"></canvas>
+        </div>
+    </div>
+
+    <!-- Slideshow (hidden initially, will be revealed after typing finishes) -->
+    <div id="slideshow-wrapper" style="display:none;">
+      <div id="slideshow">
+        <div class="slide"><img src="photo1.jpg" alt="Photo 1" /></div>
+        <div class="slide"><img src="photo2.jpg" alt="Photo 2" /></div>
+        <div class="slide"><img src="photo3.jpg" alt="Photo 3" /></div>
+
+        <div id="slide-caption">Photo 1 — A quiet memory.</div>
+
+        <button id="prevBtn" aria-label="Previous">&#9664;</button>
+        <button id="nextBtn" aria-label="Next">&#9654;</button>
+
+        <div id="dots">
+          <span class="dot" data-index="0"></span>
+          <span class="dot" data-index="1"></span>
+          <span class="dot" data-index="2"></span>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+    (function() {
+        var canvas = $('#canvas');
+		
+        if (!canvas[0].getContext) {
+            $("#error").show();
+            return false;
+        }
+
+        var width = canvas.width();
+        var height = canvas.height();        
+        canvas.attr("width", width);
+        canvas.attr("height", height);
+
+        var opts = {
+            seed: {
+                x: width / 2 - 20,
+                color: "rgb(190, 26, 37)",
+                scale: 2
+            },
+            branch: [
+                [535, 680, 570, 250, 500, 200, 30, 100, [
+                    [540, 500, 455, 417, 340, 400, 13, 100, [
+                        [450, 435, 434, 430, 394, 395, 2, 40]
+                    ]],
+                    [550, 445, 600, 356, 680, 345, 12, 100, [
+                        [578, 400, 648, 409, 661, 426, 3, 80]
+                    ]],
+                    [539, 281, 537, 248, 534, 217, 3, 40],
+                    [546, 397, 413, 247, 328, 244, 9, 80, [
+                        [427, 286, 383, 253, 371, 205, 2, 40],
+                        [498, 345, 435, 315, 395, 330, 4, 60]
+                    ]],
+                    [546, 357, 608, 252, 678, 221, 6, 100, [
+                        [590, 293, 646, 277, 648, 271, 2, 80]
+                    ]]
+                ]] 
+            ],
+            bloom: {
+                num: 700,
+                width: 1080,
+                height: 650,
+            },
+            footer: {
+                width: 1200,
+                height: 5,
+                speed: 10,
+            }
+        }
+
+        var tree = new Tree(canvas[0], width, height, opts);
+        var seed = tree.seed;
+        var foot = tree.footer;
+        var hold = 1;
+
+        canvas.click(function(e) {
+            playAudio();
+            var offset = canvas.offset(), x, y;
+            x = e.pageX - offset.left;
+            y = e.pageY - offset.top;
+            if (seed.hover(x, y)) {
+                hold = 0; 
+                canvas.unbind("click");
+                canvas.unbind("mousemove");
+                canvas.removeClass('hand');
+            }
+        }).mousemove(function(e) {
+            var offset = canvas.offset(), x, y;
+            x = e.pageX - offset.left;
+            y = e.pageY - offset.top;
+            canvas.toggleClass('hand', seed.hover(x, y));
+        });
+
+        var seedAnimate = eval(Jscex.compile("async", function () {
+            seed.draw();
+            while (hold) {
+                $await(Jscex.Async.sleep(10));
+            }
+            while (seed.canScale()) {
+                seed.scale(0.95);
+                $await(Jscex.Async.sleep(10));
+            }
+            while (seed.canMove()) {
+                seed.move(0, 2);
+                foot.draw();
+                $await(Jscex.Async.sleep(10));
+            }
+        }));
+
+        var growAnimate = eval(Jscex.compile("async", function () {
+            do {
+                tree.grow();
+                $await(Jscex.Async.sleep(10));
+            } while (tree.canGrow());
+        }));
+
+        var flowAnimate = eval(Jscex.compile("async", function () {
+            do {
+                tree.flower(2);
+                $await(Jscex.Async.sleep(10));
+            } while (tree.canFlower());
+        }));
+
+        var moveAnimate = eval(Jscex.compile("async", function () {
+            tree.snapshot("p1", 240, 0, 610, 680);
+            while (tree.move("p1", 500, 0)) {
+                foot.draw();
+                $await(Jscex.Async.sleep(10));
+            }
+            foot.draw();
+            tree.snapshot("p2", 500, 0, 610, 680);
+
+            canvas.parent().css("background", "url(" + tree.toDataURL('image/png') + ")");
+            canvas.css("background", "#ffe");
+            $await(Jscex.Async.sleep(300));
+            canvas.css("background", "none");
+        }));
+
+        var textAnimate = eval(Jscex.compile("async", function () {
+            $("#code").show().typewriter();
+        }));
+	    
+        var runAsync = eval(Jscex.compile("async", function () {
+            $await(seedAnimate());
+            $await(growAnimate());
+            $await(flowAnimate());
+            $await(moveAnimate());
+            textAnimate().start();
+        }));
+
+        runAsync().start();
+
+        /* -- NEW: Poll for typing completion, then reveal slideshow (keeps slideshow hidden until typing done) -- */
+        (function waitForTypingThenShowSlideshow() {
+            // build target text from .say spans
+            var targetText = "";
+            $("#code .say").each(function () { targetText += $(this).text().replace(/\s+/g, ' ') + " "; });
+            targetText = $.trim(targetText);
+
+            var checks = 0, maxChecks = 300; // ~60s timeout
+            var poll = setInterval(function () {
+                var current = $.trim($("#code").text().replace(/\s+/g, ' '));
+                // if typing has started but #code still hidden, ensure .typewriter plugin is showing it
+                // Consider typing complete when current length >= target - 2 or when a sensible timeout occurs
+                if (current.length >= Math.max(targetText.length - 2, 1) || checks++ > maxChecks) {
+                    clearInterval(poll);
+                    // reveal clock-box if it's hidden
+                    if ($("#clock-box").is(":hidden")) { $("#clock-box").fadeIn(800); }
+                    // reveal slideshow-wrapper (below the fold) so user can scroll to it
+                    $("#slideshow-wrapper").fadeIn(900);
+                }
+            }, 200);
+        })();
+
+        /* -- Slideshow initialization (works while hidden) -- */
+        (function initSlideshow() {
+            var slides = $("#slideshow .slide");
+            var caption = $("#slide-caption");
+            var dots = $("#dots .dot");
+            var index = 0;
+            var timer = null;
+            var captions = [
+              "Photo 1 — A quiet memory.",
+              "Photo 2 — A bright moment.",
+              "Photo 3 — A promise kept."
+            ];
+
+            function showSlide(i) {
+                if (i < 0) i = slides.length - 1;
+                if (i >= slides.length) i = 0;
+                slides.hide().eq(i).fadeIn(600);
+                caption.text(captions[i] || "");
+                dots.removeClass("active").css("background", "#666").eq(i).addClass("active").css("background", "#ddd");
+                index = i;
+            }
+
+            function nextSlide() { showSlide(index + 1); }
+            function prevSlide() { showSlide(index - 1); }
+
+            $(document).ready(function () {
+                showSlide(0);
+                timer = setInterval(nextSlide, 4000);
+                $("#nextBtn").on("click", function () { clearInterval(timer); nextSlide(); timer = setInterval(nextSlide, 4000); });
+                $("#prevBtn").on("click", function () { clearInterval(timer); prevSlide(); timer = setInterval(nextSlide, 4000); });
+                $("#dots .dot").on("click", function () {
+                    clearInterval(timer);
+                    var i = parseInt($(this).attr("data-index"), 10);
+                    showSlide(i);
+                    timer = setInterval(nextSlide, 4000);
+                });
+            });
+        })();
+
+    })();
+    </script>
+</body>
+</html>
